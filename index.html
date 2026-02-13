@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İyi ki Varsın!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow-x: hidden; font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #fce4ec 0%, #e1f5fe 100%);
+        }
+        .main-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border-radius: 40px; padding: 30px; max-width: 500px;
+            text-align: center; border: 2px solid rgba(255,255,255,0.8);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        }
+        .image-wrapper {
+            width: 150px; height: 150px; margin: 0 auto 20px;
+            border-radius: 50%; border: 5px solid white;
+            overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            background: #fff;
+        }
+        .title { font-family: 'Dancing Script', cursive; font-size: 2.8rem; color: #ff6b81; margin-bottom: 10px; }
+        .special-text { font-size: 1rem; line-height: 1.8; color: #444; margin-bottom: 25px; font-weight: 500; }
+        .glow-button {
+            padding: 15px 40px; border: none; border-radius: 50px;
+            background: linear-gradient(45deg, #ff6b81, #ff9a9e);
+            color: white; font-weight: 700; cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255, 107, 129, 0.4);
+            font-size: 1.1rem;
+        }
+        .floating-emoji {
+            position: fixed; pointer-events: none; z-index: 999;
+            font-size: 28px; animation: floatUp 5s linear forwards;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(110vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="glass-card">
+            <div class="image-wrapper">
+                <img src="IMG_2030.jpeg" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+
+            <div class="content">
+                <h1 class="title">İyi ki Doğdun!</h1>
+                <p class="special-text">
+                    Hayat, bazen en beklenmedik anlarda karşımıza paha biçilemez bir hazine çıkarır. Benim için o hazine sensin. <br><br>
+                    Sadece bir "arkadaş" demek, aramızdaki o güçlü bağı anlatmaya yetmez. Sen benim en güzel kahkahalarımın ortağı, sessizce anlaşılabildiğim tek limanımsın. <br><br>
+                    İyi ki doğdun yol arkadaşım, iyi ki varsın! ✨
+                </p>
+                
+                <button id="music-btn" class="glow-button">🎁 Sürprizi Başlat</button>
+                
+                <audio id="bg-music" loop>
+                    <source src="Happy Birthday on Piano.mp3" type="audio/mpeg">
+                </audio>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <script>
+        const musicBtn = document.getElementById('music-btn');
+        const audio = document.getElementById('bg-music');
+        let isPlaying = false;
+
+        musicBtn.addEventListener('click', () => {
+            if (!isPlaying) {
+                audio.play();
+                musicBtn.textContent = "⏸ Duraklat";
+                startEffects();
+                isPlaying = true;
+            } else {
+                audio.pause();
+                musicBtn.textContent = "🎁 Sürprizi Başlat";
+                isPlaying = false;
+            }
+        });
+
+        function startEffects() {
+            // Konfeti fırtınası
+            var end = Date.now() + (15 * 1000);
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff6b81', '#ffffff'] });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff6b81', '#ffffff'] });
+                if (Date.now() < end) { requestAnimationFrame(frame); }
+            }());
+
+            // Kayan emojiler
+            setInterval(() => {
+                if(isPlaying) {
+                    const emojis = ['✨', '🌸', '🎈', '🎂', '💖', '⭐'];
+                    const emoji = document.createElement('div');
+                    emoji.className = 'floating-emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = Math.random() * 100 + 'vw';
+                    document.body.appendChild(emoji);
+                    setTimeout(() => emoji.remove(), 5000);
+                }
+            }, 400);
+        }
+    </script>
+</body>
+</html>
